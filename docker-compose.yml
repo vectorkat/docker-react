@@ -1,0 +1,23 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Ignore /app/node_modules inside container when mapping
+      - /app/node_modules
+      # Map everything else in /app to localhost
+      - .:/app
+  tests:
+    # No ports needed
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes: 
+      - /app/node_modules
+      - .:/app
+    # Override default command at startup
+    command: ["npm", "run", "test"]
